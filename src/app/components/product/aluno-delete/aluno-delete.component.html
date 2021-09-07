@@ -1,0 +1,53 @@
+<mat-card>
+    <mat-card-title>
+        Deseja realmente excluir esse aluno?
+    </mat-card-title>
+    
+    <form>
+
+        <mat-form-field>
+            <input matInput placeholder="Nome" [value]="aluno.nome" name="name" disabled>  
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Idade" [value]="aluno.idade" name="price" disabled>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Turma" [value]="aluno.turma" name="class" disabled>
+        </mat-form-field>
+
+        <!-- Exibe os horários das aulas -->
+        <table mat-table [dataSource]="aulas" disabled>
+            <!-- Dia Column -->
+            <ng-container matColumnDef="dia" >
+              <th mat-header-cell *matHeaderCellDef>Dia</th>
+              <td mat-cell *matCellDef="let row">{{row.dia}}</td>
+            </ng-container>
+        
+            <!-- Horário Column -->
+            <ng-container matColumnDef="horario">
+              <th mat-header-cell *matHeaderCellDef>Horário</th>
+              <td mat-cell *matCellDef="let row">{{row.horario}}</td>
+            </ng-container>
+      
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+    </form>
+    <button mat-raised-button (click)="deleteAluno()" color="warn">
+        <i class="material-icons">
+            delete 
+        </i>
+        Excluir
+    </button>
+    
+    <button mat-raised-button (click)="cancel()">
+        <i class="material-icons">
+            arrow_back 
+        </i>
+        Cancelar
+    </button>
+</mat-card>
+
