@@ -1,4 +1,14 @@
-<div class="mat-elevation-z4">
+<div *ngIf="contentView == 1" class="view">
+  <!-- ADICIONAR REGISTRO -->
+  <button mat-raised-button (click)="openCreate()" color="primary">
+    <i class="material-icons">
+        person_add 
+    </i>
+    Novo aluno
+  </button>
+
+  <!-- REGISTROS -->
+  <div class="mat-elevation-z4">
     <table mat-table [dataSource]="alunos">
       <!-- Id Column -->
       <ng-container matColumnDef="id">
@@ -28,12 +38,12 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>Ações</th>
         <td mat-cell *matCellDef="let aluno">
-          <a routerLink="/alunos/update/{{aluno.id}}" class="edit">
+          <a (click)="openUpdate(aluno)" class="edit">
             <i class="material-icons">
               edit
             </i>
           </a>
-          <a routerLink="/alunos/delete/{{aluno.id}}" class="delete">
+          <a (click)="openDelete(aluno)" class="delete">
             <i class="material-icons">
               delete
             </i>
@@ -46,6 +56,171 @@
     </table>
 
     <!-- Fazer paginação da tabela -->
-  
   </div>
+</div>
+
+<div *ngIf="contentView == 2" class="create">
+  <mat-card>
+    <mat-card-title>
+        Novo Aluno
+    </mat-card-title>
+    
+    <form>
+
+        <mat-form-field>
+            <input matInput placeholder="Nome" [(ngModel)]="alunoCreate.nome" name="name">  
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Idade" [(ngModel)]="alunoCreate.idade" name="price">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Turma" [(ngModel)]="alunoCreate.turma" name="class">
+        </mat-form-field>
+
+    </form>
+    <button mat-raised-button (click)="saveCreate()" color="primary">
+        <i class="material-icons">
+            person_add 
+        </i>
+        Adicionar
+    </button>
+    
+    <button mat-raised-button (click)="goHome()">
+        <i class="material-icons">
+            arrow_back 
+        </i>
+        Cancelar
+    </button>
+  </mat-card>
+</div>
+
+<div *ngIf="contentView == 3" class="update">
+  <mat-card>
+    <mat-card-title>
+        Alterar aluno
+    </mat-card-title>
+    
+    <form>
+        <mat-form-field>
+            <input matInput placeholder="Nome" [(ngModel)]="alunoUpdate.nome" name="name">  
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Idade" [(ngModel)]="alunoUpdate.idade" name="age">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Turma" [(ngModel)]="alunoUpdate.turma" name="class">
+        </mat-form-field>
+
+
+        <!-- Exibe os horários das aulas -->
+        <!-- <table mat-table [dataSource]="aulas">
+            <ng-container matColumnDef="dia">
+              <th mat-header-cell *matHeaderCellDef>Dia</th>
+              <td mat-cell *matCellDef="let row">{{row.dia}}</td>
+            </ng-container>
+        
+
+            <ng-container matColumnDef="horario">
+              <th mat-header-cell *matHeaderCellDef>Horário</th>
+              <td mat-cell *matCellDef="let row">{{row.horario}}</td>
+            </ng-container>
+        
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <td mat-cell *matCellDef="let aluno">
+                <a routerLink="/alunos/horario/update" class="edit">
+                  <i class="material-icons">
+                    edit
+                  </i>
+                </a>
+                <a routerLink="/alunos/horario/delete" class="delete">
+                  <i class="material-icons">
+                    delete
+                  </i>
+                </a>
+              </td>
+            </ng-container>
+      
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsUpdate"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsUpdate;"></tr>
+        </table> 
+        -->
+    </form>
+
+    <button mat-raised-button (click)="saveUpdate()" color="primary">
+        <i class="material-icons">
+            check 
+        </i>
+        Salvar
+    </button>
+    
+    <button mat-raised-button (click)="goHome()">
+        <i class="material-icons">
+            arrow_back 
+        </i>
+        Cancelar
+    </button>
+  </mat-card>
+</div>
+
+
+<div *ngIf="contentView == 4" class="delete">
+  <mat-card>
+    <mat-card-title>
+        Deseja realmente excluir esse aluno?
+    </mat-card-title>
+    
+    <form>
+
+        <mat-form-field>
+            <input matInput placeholder="Nome" [value]="alunoDelete.nome" name="name" disabled>  
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Idade" [value]="alunoDelete.idade" name="price" disabled>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Turma" [value]="alunoDelete.turma" name="class" disabled>
+        </mat-form-field>
+
+        <!-- Exibe os horários das aulas -->
+        <!-- <table mat-table [dataSource]="aulas" disabled>
+
+            <ng-container matColumnDef="dia" >
+              <th mat-header-cell *matHeaderCellDef>Dia</th>
+              <td mat-cell *matCellDef="let row">{{row.dia}}</td>
+            </ng-container>
+        
+            <ng-container matColumnDef="horario">
+              <th mat-header-cell *matHeaderCellDef>Horário</th>
+              <td mat-cell *matCellDef="let row">{{row.horario}}</td>
+            </ng-container>
+      
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table> -->
+
+    </form>
+    <button mat-raised-button (click)="saveDelete(alunoDelete.id)" color="warn">
+        <i class="material-icons">
+            delete 
+        </i>
+        Excluir
+    </button>
+    
+    <button mat-raised-button (click)="goHome()">
+        <i class="material-icons">
+            arrow_back 
+        </i>
+        Cancelar
+    </button>
+  </mat-card>
+</div>
+
   

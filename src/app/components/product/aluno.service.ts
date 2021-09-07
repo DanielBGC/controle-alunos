@@ -58,7 +58,7 @@ export class AlunoService {
 
   update(aluno: Aluno): Observable<Aluno> {
     const url = this.alunosUrl2 + "/" + aluno.id
-    return this.http.put<Aluno>(url, aluno).pipe(
+    return this.http.post<Aluno>(url, aluno).pipe(
       map(obj => obj),
       catchError(error => this.handleError(error))
     )

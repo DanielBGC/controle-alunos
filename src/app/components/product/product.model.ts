@@ -7,7 +7,7 @@ export interface Product {
 
 export interface Aluno {
     id?: number
-    nome?: string
+    nome: string
     idade?: number
     turma?: string
     aulas?: Array<Object>
