@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { Product } from '../product.model';
+import { Product } from '../aluno.model';
 import { ProductRead2DataSource } from './product-read2-datasource';
 
 @Component({

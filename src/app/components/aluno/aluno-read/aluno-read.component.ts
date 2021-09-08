@@ -1,14 +1,35 @@
-import { AlunoService } from './../aluno.service';
-import { Aluno } from './../product.model';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { AlunoService } from '../../../services/aluno.service';
+import { Aluno } from '../aluno.model';
 
-import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-product-read',
-  templateUrl: './product-read.component.html',
-  styleUrls: ['./product-read.component.css']
+  selector: 'app-aluno-read',
+  templateUrl: './aluno-read.component.html',
+  styleUrls: ['./aluno-read.component.css']
 })
-export class ProductReadComponent implements OnInit {
+
+export class AlunoReadComponent implements AfterViewInit, OnInit {
+  @ViewChild(MatSort) sort: MatSort;
+
+  //VARIÁVEIS
+  baseUrl = 'http://localhost:3000/api/alunos'
+  displayedColumns = ['id', 'nome', 'idade', 'turma', 'action']
+  contentView = 1;
+  displayedColumnsUpdate = ['dia', 'horario']
+
+  alunos: Aluno[];
+  selectAlunos = [];
+  selectedValue: string;
+
+  dataSource = new MatTableDataSource([{id: 1, nome: 'José', idade: 5}, {id: 2, nome: 'Maria', idade: 9}]);
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   aluno: Aluno = {
     nome: '',
     idade: null,
@@ -37,26 +58,20 @@ export class ProductReadComponent implements OnInit {
     aulas: []
   }
 
-  baseUrl = 'http://localhost:3000/api/alunos'
-  alunos: Aluno[]
-  displayedColumns = ['id', 'name', 'age', 'class', 'action']
-  contentView = 1;
-  displayedColumnsUpdate = ['dia', 'horario']
-
-
-  constructor(
-    private alunoService: AlunoService,
-    ) { }
-
-  async ngOnInit() {
-    // this.alunoService.read().subscribe(data => {
-    //   console.log(data)
-    //   this.alunos = data;
-    // })
-    this.filtrar();
+  objFormFilter = {
+      nome : ''
+    , idade: null
   }
 
-  async filtrar() {
+  constructor(
+    private alunoService: AlunoService
+  ) { }
+
+  async ngOnInit() {
+    this.filtrarTabela();
+  }
+
+  async filtrarTabela() {
     let arrAlunos = []
 
     await this.alunoService.get(this.baseUrl)
@@ -67,18 +82,50 @@ export class ProductReadComponent implements OnInit {
     })
 
     this.alunos = arrAlunos;
+
+    this.selectAlunos = arrAlunos;
+
+    this.dataSource = new MatTableDataSource(this.selectAlunos);
+    this.dataSource.sort = this.sort;
+  }
+
+  filtrarAlunos() {
+    console.log(this.objFormFilter)
+    let filterNome = this.objFormFilter.nome.toLowerCase();
+    let filterIdade = this.objFormFilter.idade;
+
+    this.selectAlunos = this.alunos.filter(aluno => aluno.nome.toLowerCase().includes(filterNome))
+
+    if(filterIdade != null) {
+      this.selectAlunos = this.selectAlunos.filter(aluno => aluno.idade == +filterIdade)
+    }
+
+    this.dataSource = new MatTableDataSource(this.selectAlunos);
+    this.dataSource.sort = this.sort;
+  }
+
+  limparFiltros() {
+    this.objFormFilter = {
+        nome : ''
+      , idade: null
+    }
+
+    this.filtrarAlunos()
   }
 
   goHome(): void {
     this.contentView = 1;
   }
 
-  // navigateToAlunoCreate(): void {
-  //   this.router.navigate(["alunos/create"])
-  // }
-
   openCreate(): void {
     this.contentView = 2;
+
+    this.alunoCreate = {
+      nome: '',
+      idade: null,
+      turma: '',
+      aulas: []
+    }  
   }
 
   async openUpdate(obj) {
@@ -140,7 +187,7 @@ export class ProductReadComponent implements OnInit {
         console.log(data)
         this.alunoService.showMessage("Aluno inserido com sucesso!")
         this.goHome();
-        this.filtrar();
+        this.filtrarTabela();
 
       })
     }
@@ -163,7 +210,7 @@ export class ProductReadComponent implements OnInit {
       this.alunoService.update(this.alunoUpdate).subscribe(() => {
         this.alunoService.showMessage("Aluno atualizado com sucesso!")
         this.goHome();
-        this.filtrar();
+        this.filtrarTabela();
       })
     }
   }
@@ -172,7 +219,7 @@ export class ProductReadComponent implements OnInit {
     this.alunoService.delete(id).subscribe(() => {
       this.alunoService.showMessage("Aluno excluído com sucesso!")
       this.goHome();
-      this.filtrar();
+      this.filtrarTabela();
     })
   }
 

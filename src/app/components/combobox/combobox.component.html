@@ -1,0 +1,31 @@
+<!-- <div class="form-group combobox" [formGroup]="formSelect" [ngClass]="{ 'overlay': disabled }">
+    <label *ngIf="label" [ngClass]="{'textRed': formSelect.controls[formControlNameSelect].invalid, 'mb-0': true}">{{label}}</label>
+    <ng-select  bindLabel="text"
+                [items]="items"
+                [typeahead]="typeahead"
+                [loading]="loading"
+                [virtualScroll]="true"
+                [(ngModel)]="selectedData"
+                (change)="changeValue($event)"
+                placeholder="Digite para pesquisar"
+                formControlName="{{formControlNameSelect}}"
+                [typeToSearchText]="'Digite para pesquisar'"
+                [loadingText]="'Carregando...'"
+                [notFoundText]="'Não encontrado :('"
+                [ngClass]="{'invalid': formSelect.controls[formControlNameSelect].invalid }"
+    >
+      <ng-template *ngIf="custom" ng-label-tmp let-item="item">
+        <i *ngIf="custom === 'icon'" class="{{content}} {{item?.class}}" [style.color]="item?.color"></i>
+        <img *ngIf="custom === 'img'" height="15" width="15" src="{{content}}"/>
+        {{item.text}}
+        <div *ngIf="custom === 'note'" class="ng-note"><small>{{content}}{{item?.note}}</small></div>
+      </ng-template>
+  
+      <ng-template *ngIf="custom" ng-option-tmp let-item="item" let-index="index">
+        <i *ngIf="custom === 'icon'" class="{{content}} {{item?.class}}" [style.color]="item?.color"></i>
+        <img  *ngIf="custom === 'img'" height="15" width="15" src="{{content}}"/>
+        {{item.text}}
+        <div *ngIf="custom === 'note'" class="ng-note"><small>{{content}}{{item?.note}}</small></div>
+      </ng-template>
+    </ng-select>
+</div> -->

@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Aluno } from './product.model';
+import { Aluno } from '../components/aluno/aluno.model';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { HttpClient } from '@angular/common/http';

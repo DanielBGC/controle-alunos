@@ -1,0 +1,265 @@
+<div *ngIf="contentView == 1" class="view">
+    <!-- ADICIONAR REGISTRO -->
+    <button mat-raised-button (click)="openCreate()" color="primary">
+      <i class="material-icons">
+          add 
+      </i>
+      Adicionar pagamento
+    </button>
+  
+    <!-- FILTROS -->
+    <form>
+      <mat-form-field>
+        <mat-label>Situação</mat-label>
+        <mat-select [(ngModel)]="objFormFilter.situacao" name="aluno">
+          <mat-option [value]="">Todos</mat-option>
+          <mat-option *ngFor="let item of comboboxPagamentos" [value]="item.text">
+            {{item.text}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput placeholder="Responsável" [(ngModel)]="objFormFilter.responsavel" name="name">  
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput placeholder="Aluno" [(ngModel)]="objFormFilter.aluno" name="name">  
+      </mat-form-field>
+
+  
+      <div class="form-buttons">
+        <button mat-raised-button class="filter-button" (click)="filtrarPagamentos()" color="primary">
+          <i class="material-icons">
+            search 
+          </i>
+          Filtrar
+        </button>
+  
+        <button mat-raised-button class="clear-button" (click)="limparFiltros()" color="primary">
+          <i class="material-icons">
+            delete 
+          </i>
+          Limpar Filtros
+        </button>
+      </div>
+  
+    </form>
+  
+    <!-- REGISTROS -->
+    <div class="mat-elevation-z4">
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="responsavel">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Responsável</th>
+            <td mat-cell *matCellDef="let row">{{row.responsavel}}</td>
+          </ng-container>
+    
+        <ng-container matColumnDef="aluno">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Aluno</th>
+          <td mat-cell *matCellDef="let row">{{row.aluno}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="situacao">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Situação</th>
+            <td mat-cell *matCellDef="let row">{{row.situacao}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ultimo_pagamento">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Último pagamento</th>
+            <td mat-cell *matCellDef="let row">{{row.ultimo_pagamento}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="valor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor (R$)</th>
+            <td mat-cell *matCellDef="let row">{{row.valor}}</td>
+        </ng-container>
+    
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let aluno">
+            <a (click)="openUpdate(aluno)" class="edit">
+              <i class="material-icons">
+                edit
+              </i>
+            </a>
+            <a (click)="openDelete(aluno)" class="delete">
+              <i class="material-icons">
+                delete
+              </i>
+            </a>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+  
+      <!-- Fazer paginação da tabela -->
+    </div>
+  </div>
+  
+  <div *ngIf="contentView == 2" class="create">
+    <mat-card>
+        <mat-card-title>
+            Novo Pagamento
+        </mat-card-title>
+        
+        <form>
+            <mat-form-field>
+                <input matInput placeholder="Aluno" [(ngModel)]="pagamento.aluno" name="aluno">  
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput placeholder="Valor" [(ngModel)]="pagamento.valor" name="valor">
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="fill">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field> -->
+
+            <mat-form-field class="example-form-field">
+                <mat-label>Data do pagamento</mat-label>
+                <input matInput [matDatepicker]="datepicker" [(ngModel)]="pagamento.data" name="data">
+                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                <mat-datepicker #datepicker>
+                  <mat-datepicker-actions>
+                    <button mat-button matDatepickerCancel>Cancelar</button>
+                    <button mat-raised-button color="primary" matDatepickerApply>Ok</button>
+                  </mat-datepicker-actions>
+                </mat-datepicker>
+            </mat-form-field>
+        </form>
+
+        <button mat-raised-button (click)="saveCreate()" color="primary">
+            <i class="material-icons">
+                add 
+            </i>
+            Adicionar
+        </button>
+        
+        <button mat-raised-button (click)="goHome()">
+            <i class="material-icons">
+                arrow_back 
+            </i>
+            Cancelar
+        </button>
+    </mat-card>
+  </div>
+  
+  <div *ngIf="contentView == 3" class="update">
+    <mat-card>
+      <mat-card-title>
+          Alterar aluno
+      </mat-card-title>
+      
+      <form>
+          <mat-form-field>
+              <input matInput placeholder="Nome" [(ngModel)]="alunoUpdate.nome" name="name">  
+          </mat-form-field>
+  
+          <mat-form-field>
+              <input matInput placeholder="Idade" [(ngModel)]="alunoUpdate.idade" name="age">
+          </mat-form-field>
+  
+          <mat-form-field>
+              <input matInput placeholder="Turma" [(ngModel)]="alunoUpdate.turma" name="class">
+          </mat-form-field>
+  
+  
+          <!-- Exibe os horários das aulas -->
+          <!-- <table mat-table [dataSource]="aulas">
+              <ng-container matColumnDef="dia">
+                <th mat-header-cell *matHeaderCellDef>Dia</th>
+                <td mat-cell *matCellDef="let row">{{row.dia}}</td>
+              </ng-container>
+          
+  
+              <ng-container matColumnDef="horario">
+                <th mat-header-cell *matHeaderCellDef>Horário</th>
+                <td mat-cell *matCellDef="let row">{{row.horario}}</td>
+              </ng-container>
+          
+  
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Ações</th>
+                <td mat-cell *matCellDef="let aluno">
+                  <a routerLink="/alunos/horario/update" class="edit">
+                    <i class="material-icons">
+                      edit
+                    </i>
+                  </a>
+                  <a routerLink="/alunos/horario/delete" class="delete">
+                    <i class="material-icons">
+                      delete
+                    </i>
+                  </a>
+                </td>
+              </ng-container>
+        
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsUpdate"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsUpdate;"></tr>
+          </table> 
+          -->
+      </form>
+  
+      <button mat-raised-button (click)="saveUpdate()" color="primary">
+          <i class="material-icons">
+              check 
+          </i>
+          Salvar
+      </button>
+      
+      <button mat-raised-button (click)="goHome()">
+          <i class="material-icons">
+              arrow_back 
+          </i>
+          Cancelar
+      </button>
+    </mat-card>
+  </div>
+  
+  
+  <div *ngIf="contentView == 4" class="delete">
+    <mat-card>
+      <mat-card-title>
+          Deseja realmente excluir esse aluno?
+      </mat-card-title>
+      
+      <form>
+  
+          <mat-form-field>
+              <input matInput placeholder="Nome" [value]="alunoDelete.nome" name="name" disabled>  
+          </mat-form-field>
+  
+          <mat-form-field>
+              <input matInput placeholder="Idade" [value]="alunoDelete.idade" name="price" disabled>
+          </mat-form-field>
+  
+          <mat-form-field>
+              <input matInput placeholder="Turma" [value]="alunoDelete.turma" name="class" disabled>
+          </mat-form-field>
+  
+       
+      </form>
+      <button mat-raised-button (click)="saveDelete(alunoDelete.id)" color="warn">
+          <i class="material-icons">
+              delete 
+          </i>
+          Excluir
+      </button>
+      
+      <button mat-raised-button (click)="goHome()">
+          <i class="material-icons">
+              arrow_back 
+          </i>
+          Cancelar
+      </button>
+    </mat-card>
+</div>
+  
+    

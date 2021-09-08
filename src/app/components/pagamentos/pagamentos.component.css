@@ -1,5 +1,26 @@
+div.view {
+    position: relative;
+}
+
+div.view .form-buttons {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    display: flex;
+}
+
+div.view .form-buttons button {
+    margin-left: 1rem;
+}
+
+div.view form mat-form-field {
+    margin-right: 2rem;
+}
+
 div.view table {
     width: 100%;
+    margin-top: 2rem;
 }
 
 div.view .edit {

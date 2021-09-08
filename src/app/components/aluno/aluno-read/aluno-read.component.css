@@ -1,0 +1,75 @@
+div.view {
+    position: relative;
+}
+
+div.view .form-buttons {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    display: flex;
+}
+
+div.view .form-buttons button {
+    margin-left: 1rem;
+}
+
+div.view form mat-form-field {
+    margin-right: 2rem;
+}
+
+div.view table {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+div.view .edit {
+    margin-right: 10px;
+}
+
+div.view .edit > i {
+    color: #d9c626;
+    cursor: pointer;
+}
+
+div.view .delete > i{
+    color: #db3c51;
+    cursor: pointer;
+}
+
+div.view button {
+    margin: 20px 0px;
+}
+
+div.create form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+div.create button {
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+div.update form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+div.update button {
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+div.delete form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+div.delete button {
+    margin-right: 10px;
+    margin-top: 20px;
+}
