@@ -15,7 +15,7 @@ export class AlunoCrudComponent implements OnInit {
     private headerService: HeaderService) { 
       this.headerService.headerData = {
         title: "Cadastro de alunos",
-        icon: "storefront",
+        icon: "face",
         routeUrl: "/alunos"
       }
   }

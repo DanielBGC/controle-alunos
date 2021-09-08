@@ -1,0 +1,18 @@
+<form>
+    <h3>Faça seu login</h3>
+
+    <mat-form-field>
+      <input matInput placeholder="E-mail" [(ngModel)]="objLogin.email" name="email">  
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Senha" type="password" [(ngModel)]="objLogin.senha" name="senha">  
+    </mat-form-field>
+
+    <button mat-raised-button (click)="login()" color="primary">
+        <i class="material-icons">
+            login 
+        </i>
+        Login
+    </button>
+</form>
