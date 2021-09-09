@@ -14,7 +14,7 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
 
   //VARIÁVEIS
   baseUrl = 'http://localhost:3000/api/alunos'
-  displayedColumns = ['responsavel', 'aluno', 'situacao', 'ultimo_pagamento', 'valor', 'action']
+  displayedColumns = ['responsavel', 'aluno', 'data', 'mes', 'valor', 'action']
   contentView = 1;
 
   alunos = [];
@@ -22,14 +22,8 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
   selectedValue: string;
 
   DATA_TESTE = [
-      {responsavel: 'Maria Cardoso Silva', aluno: 'Daniel Rodrigo', situacao: 'Pagamento atrasado', ultimo_pagamento: '05/08/2021', valor: 150.00}
-    , {responsavel: 'Josias do Nascimento', aluno: 'Maria Joaquina', situacao: 'OK', ultimo_pagamento: '06/09/2021', valor: 120.00}
-  ]
-
-  comboboxPagamentos = [
-      {id: 1, text: 'Pagamento atrasado'}
-    , {id: 2, text: 'OK'}
-    , {id: 3, text: 'A combinar'}
+      {responsavel: 'Maria Cardoso Silva', aluno: 'Daniel Rodrigo', data: '05/08/2021', mes: 'Julho', valor: 150}
+    , {responsavel: 'Josias do Nascimento', aluno: 'Maria Joaquina', data: '06/09/2021', mes: 'Agosto', valor: 120}
   ]
 
   dataSource = new MatTableDataSource(this.DATA_TESTE);
@@ -52,10 +46,30 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
   }
 
   objFormFilter = {
-      responsavel: ''
-    , aluno: ''
-    , situacao: ''
+    responsavel : ''
+    , aluno       : ''
+    , mes         : ''
+    , valor       : null
+    , data        : {
+        inicio: ''
+      , fim: ''
+    }
   }
+
+  comboboxMeses = [
+      {id: 1, text: 'Janeiro'}
+    , {id: 2, text: 'Fevereiro'}
+    , {id: 3, text: 'Março'}
+    , {id: 4, text: 'Abril'}
+    , {id: 5, text: 'Maio'}
+    , {id: 6, text: 'Junho'}
+    , {id: 7, text: 'Julho'}
+    , {id: 8, text: 'Agosto'}
+    , {id: 9, text: 'Setembro'}
+    , {id: 10, text: 'Outubro'}
+    , {id: 11, text: 'Novembro'}
+    , {id: 12, text: 'Dezembro'}
+  ]
 
   constructor(
     private headerService: HeaderService,
@@ -92,7 +106,6 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
 
   filtrarPagamentos() {
     console.log(this.objFormFilter)
-    let filterSituacao = this.objFormFilter.situacao;
     let filterResponsavel = this.objFormFilter.responsavel.toLowerCase();
     let filterAluno = this.objFormFilter.aluno.toLowerCase();
 
@@ -100,10 +113,26 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
 
     this.selected = this.selected.filter(item => item.aluno.toLowerCase().includes(filterAluno))
 
-    if(filterSituacao != undefined) {
-      this.selected = this.selected.filter(item => item.situacao.includes(filterSituacao))
+    if(this.objFormFilter.data.inicio != '' && this.objFormFilter.data.fim != '') {
+      let dataInicio = this.formataDataBR(this.objFormFilter.data.inicio);
+      let dataFim = this.formataDataBR(this.objFormFilter.data.fim);
+      let from = this.formataDataEN(dataInicio);
+      let to   = this.formataDataEN(dataFim);
+
+      this.selected = this.selected.filter(item => {
+        let currentData = this.formataDataEN(item.data)
+
+        return (currentData >= from && currentData <= to);
+      })
     }
 
+    if(this.objFormFilter.mes != undefined) {
+      this.selected = this.selected.filter(item => item.mes.includes(this.objFormFilter.mes))
+    }
+
+    if(this.objFormFilter.valor != null) {
+      this.selected = this.selected.filter(item => item.valor == this.objFormFilter.valor)
+    }
 
     this.dataSource = new MatTableDataSource(this.selected);
     this.dataSource.sort = this.sort;
@@ -111,9 +140,14 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
 
   limparFiltros() {
     this.objFormFilter = {
-        responsavel: ''
-      , aluno: ''
-      , situacao: ''
+        responsavel : ''
+      , aluno       : ''
+      , mes         : ''
+      , valor       : null
+      , data        : {
+          inicio: ''
+        , fim: ''
+      }
     }
 
     this.filtrarPagamentos()
@@ -235,6 +269,24 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
       this.goHome();
       this.filtrarTabela();
     })
+  }
+
+  formataDataEN(date) {
+    date = date.split("/")
+
+    date = new Date(date[2], parseInt(date[1]) -1, date[0]);
+
+    return date;
+  }
+
+  formataDataBR(date) {
+    var dia = String(date.getDate()).padStart(2, '0');
+    var mes = String(date.getMonth() + 1).padStart(2, '0'); 
+    var ano = date.getFullYear();
+
+    let dataString = `${dia}/${mes}/${ano}`
+
+    return dataString;
   }
 }
 

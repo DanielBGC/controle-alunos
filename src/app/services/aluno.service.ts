@@ -20,7 +20,7 @@ export class AlunoService {
     ) { }
 
   showMessage(msg: string, isError: boolean = false): void {
-    this.snackBar.open(msg, "X", {
+    this.snackBar.open(msg, "", {
       duration: 2000,
       horizontalPosition: "right",
       verticalPosition: "top",

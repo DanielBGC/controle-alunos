@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ComboboxServices } from 'src/app/services/combobox.service';
+import { UtilsServices } from './../../../services/utils.service';
 import { AlunoService } from '../../../services/aluno.service';
 import { Aluno } from '../aluno.model';
 
@@ -13,18 +16,21 @@ import { Aluno } from '../aluno.model';
 
 export class AlunoReadComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild("Modal") modal;
 
   //VARIÁVEIS
   baseUrl = 'http://localhost:3000/api/alunos'
-  displayedColumns = ['id', 'nome', 'idade', 'turma', 'action']
+
+  displayedColumns = ['id', 'nome', 'turma', 'action']
+  displayedColumnsAulas = ['dia', 'horario']
+
   contentView = 1;
-  displayedColumnsUpdate = ['dia', 'horario']
 
   alunos: Aluno[];
   selectAlunos = [];
   selectedValue: string;
 
-  dataSource = new MatTableDataSource([{id: 1, nome: 'José', idade: 5}, {id: 2, nome: 'Maria', idade: 9}]);
+  dataSource = new MatTableDataSource();
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -35,6 +41,14 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     idade: null,
     turma: '',
     aulas: []
+  }
+
+  alunoView = {
+    nome: '',
+    aulas: [
+        {dia: 'Segunda-feira', horario: '08h00 - 09h00'}
+      , {dia: 'Quarta-feira', horario: '13h00 - 14h30'}
+    ] 
   }
 
   alunoCreate: Aluno = {
@@ -60,12 +74,27 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
 
   objFormFilter = {
       nome : ''
-    , idade: null
   }
 
+  public  objFormRegister : FormGroup;
+  public  objFormAulas    : FormArray;
+
   constructor(
-    private alunoService: AlunoService
-  ) { }
+    private alunoService    : AlunoService,
+    private formBuilder     : FormBuilder,
+    private utilServices    : UtilsServices,
+    public  comboboxServices: ComboboxServices
+  ) { 
+    this.objFormRegister = this.formBuilder.group({
+        nome : ['', Validators.required]
+      , turma: ['', Validators.required]
+      , aulas: [[], Validators.required]
+    })
+
+    this.objFormAulas = this.formBuilder.array([
+      this.getFormAula()
+    ])
+  }
 
   async ngOnInit() {
     this.filtrarTabela();
@@ -92,13 +121,8 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   filtrarAlunos() {
     console.log(this.objFormFilter)
     let filterNome = this.objFormFilter.nome.toLowerCase();
-    let filterIdade = this.objFormFilter.idade;
 
     this.selectAlunos = this.alunos.filter(aluno => aluno.nome.toLowerCase().includes(filterNome))
-
-    if(filterIdade != null) {
-      this.selectAlunos = this.selectAlunos.filter(aluno => aluno.idade == +filterIdade)
-    }
 
     this.dataSource = new MatTableDataSource(this.selectAlunos);
     this.dataSource.sort = this.sort;
@@ -107,7 +131,6 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   limparFiltros() {
     this.objFormFilter = {
         nome : ''
-      , idade: null
     }
 
     this.filtrarAlunos()
@@ -115,6 +138,12 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
 
   goHome(): void {
     this.contentView = 1;
+  }
+
+  openAulas(obj): void {
+    this.contentView = 5;
+
+    this.alunoView.nome = obj.nome;
   }
 
   openCreate(): void {
@@ -126,6 +155,22 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
       turma: '',
       aulas: []
     }  
+  }
+
+  getFormAula() {
+    return this.formBuilder.group({
+        dia             : ['', Validators.required]
+      , horarioInicio   : ['', Validators.required]
+      , horarioFim      : ['', Validators.required]
+    })
+  }
+
+  addFormAula() {
+    this.objFormAulas.push(this.getFormAula())
+  }
+
+  removeFormAula(i) {
+    this.objFormAulas.removeAt(i)
   }
 
   async openUpdate(obj) {
@@ -163,32 +208,31 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   }
 
   saveCreate(): void {
-    if(this.alunoCreate.nome == "" 
-      || this.alunoCreate.nome == " " 
-      || this.alunoCreate.nome == undefined 
-      || this.alunoCreate.nome == null) {
+
+    if(this.objFormRegister.controls['nome'].value == "" 
+      || this.objFormRegister.controls['nome'].value == " " 
+      || this.objFormRegister.controls['nome'].value == undefined 
+      || this.objFormRegister.controls['nome'].value == null) {
       this.alunoService.showMessage("Preencha o nome corretamente!")
     }
-    else if(this.alunoCreate.idade + "" == "" 
-      || this.alunoCreate.idade + "" == " " 
-      || this.alunoCreate.idade == undefined 
-      || this.alunoCreate.idade == null) {
-      this.alunoService.showMessage("Preencha a idade corretamente!")
-    }
-    else if(this.alunoCreate.turma + "" == "" 
-      || this.alunoCreate.turma + "" == " " 
-      || this.alunoCreate.turma == undefined 
-      || this.alunoCreate.turma == null) {
+    else if(this.objFormRegister.controls['turma'].value + "" == "" 
+      || this.objFormRegister.controls['turma'].value + "" == " " 
+      || this.objFormRegister.controls['turma'].value == undefined 
+      || this.objFormRegister.controls['turma'].value == null) {
       this.alunoService.showMessage("Preencha a turma corretamente!")
     }
     else {
-      this.alunoService.create(this.alunoCreate).subscribe((data) => {
-  
+      if(this.objFormAulas.length > 0) {
+        this.objFormRegister.controls['aulas'].setValue(this.objFormAulas.value)
+      }
+
+      console.log(this.objFormRegister.value)
+      
+      this.alunoService.create(this.objFormRegister.value).subscribe((data) => {  
         console.log(data)
         this.alunoService.showMessage("Aluno inserido com sucesso!")
         this.goHome();
         this.filtrarTabela();
-
       })
     }
   }
@@ -222,6 +266,8 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
       this.filtrarTabela();
     })
   }
+
+ 
 
 
 }

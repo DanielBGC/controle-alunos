@@ -26,6 +26,7 @@ import { MatListModule} from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker'
 
 // import { MatMomentDateModule } from "@angular/material-moment-adapter";
 
@@ -87,7 +88,8 @@ registerLocaleData(localePt);
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [{
     provide: LOCALE_ID,

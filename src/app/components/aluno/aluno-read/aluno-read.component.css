@@ -23,16 +23,21 @@ div.view table {
     margin-top: 2rem;
 }
 
-div.view .edit {
+div.view i {
     margin-right: 10px;
 }
 
-div.view .edit > i {
+div.view a.view > i {
+    color: #193574;
+    cursor: pointer;
+}
+
+div.view a.edit > i {
     color: #d9c626;
     cursor: pointer;
 }
 
-div.view .delete > i{
+div.view a.delete > i{
     color: #db3c51;
     cursor: pointer;
 }
@@ -50,6 +55,21 @@ div.create form {
 div.create button {
     margin-right: 10px;
     margin-top: 20px;
+}
+
+div.create ngx-material-timepicker-toggle {
+    position: absolute;
+    right: 0;
+    top: -5px
+}
+
+div.create .aulas-form mat-form-field {
+    margin-right: 1rem;
+}
+
+div.create .addFormAula {
+    position: absolute;
+    right: 0;
 }
 
 div.update form {
@@ -72,4 +92,18 @@ div.delete form {
 div.delete button {
     margin-right: 10px;
     margin-top: 20px;
+}
+
+div.aulas table {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+div.aulas h3 {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+div.aulas button {
+    margin-top: 2rem;
 }

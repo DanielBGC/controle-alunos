@@ -10,16 +10,6 @@
     <!-- FILTROS -->
     <form>
       <mat-form-field>
-        <mat-label>Situação</mat-label>
-        <mat-select [(ngModel)]="objFormFilter.situacao" name="aluno">
-          <mat-option [value]="">Todos</mat-option>
-          <mat-option *ngFor="let item of comboboxPagamentos" [value]="item.text">
-            {{item.text}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-  
-      <mat-form-field>
         <input matInput placeholder="Responsável" [(ngModel)]="objFormFilter.responsavel" name="name">  
       </mat-form-field>
   
@@ -27,6 +17,29 @@
         <input matInput placeholder="Aluno" [(ngModel)]="objFormFilter.aluno" name="name">  
       </mat-form-field>
 
+      <mat-form-field>
+        <mat-label>Data do pagamento</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Início" [(ngModel)]="objFormFilter.data.inicio" name="dataInicio">
+          <input matEndDate placeholder="Fim" [(ngModel)]="objFormFilter.data.fim" name="dataFim">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Referente ao mês</mat-label>
+        <mat-select [(ngModel)]="objFormFilter.mes" name="meses"> <!-- MULTIPLE -->
+          <mat-option [value]="">Todos</mat-option>
+          <mat-option *ngFor="let item of comboboxMeses" [value]="item.text">
+            {{item.text}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Valor" type="number" [(ngModel)]="objFormFilter.valor" name="valor">  
+      </mat-form-field>
   
       <div class="form-buttons">
         <button mat-raised-button class="filter-button" (click)="filtrarPagamentos()" color="primary">
@@ -60,15 +73,15 @@
           <td mat-cell *matCellDef="let row">{{row.aluno}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="situacao">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Situação</th>
-            <td mat-cell *matCellDef="let row">{{row.situacao}}</td>
+        <ng-container matColumnDef="data">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+            <td mat-cell *matCellDef="let row">{{row.data}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="ultimo_pagamento">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Último pagamento</th>
-            <td mat-cell *matCellDef="let row">{{row.ultimo_pagamento}}</td>
-        </ng-container>
+        <ng-container matColumnDef="mes">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Referente <br> ao mês</th>
+          <td mat-cell *matCellDef="let row">{{row.mes}}</td>
+      </ng-container>
 
         <ng-container matColumnDef="valor">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor (R$)</th>
