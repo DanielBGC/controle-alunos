@@ -1,18 +1,26 @@
-<form>
-    <h3>Faça seu login</h3>
-
+<div class="container">
+  <form>
+    <h4>Faça seu login para continuar...</h4>
+    
     <mat-form-field>
+      <i class="material-icons">
+        email 
+      </i>
       <input matInput placeholder="E-mail" [(ngModel)]="objLogin.email" name="email">  
     </mat-form-field>
-
+    
     <mat-form-field>
+      <i class="material-icons">
+        lock 
+      </i>
       <input matInput placeholder="Senha" type="password" [(ngModel)]="objLogin.senha" name="senha">  
     </mat-form-field>
-
+    
     <button mat-raised-button (click)="login()" color="primary">
-        <i class="material-icons">
-            login 
-        </i>
-        Login
+      <i class="material-icons">
+        login 
+      </i>
+      Login
     </button>
-</form>
+  </form>
+</div>

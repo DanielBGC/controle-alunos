@@ -1,15 +1,20 @@
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { routes } from './app-routing2.module';
+
 
 // MÓDULOS ANGULAR
-import localePt from '@angular/common/locales/pt'
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from "@angular/common/http";
+import localePt from '@angular/common/locales/pt'
 import { FormsModule } from "@angular/forms"
 import { registerLocaleData } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router'; 
+
 
 // COMPONENTES ANGULAR MATERIAL 
 import { MatFormFieldModule } from "@angular/material/form-field"
@@ -27,12 +32,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker'
+import { ToastrModule } from 'ngx-toastr';
 
-// import { MatMomentDateModule } from "@angular/material-moment-adapter";
-
+// import { MatMomentDateModule } from "@angular/material-moment-adapter"
 
 // COMPONENTES DE TERCEIROS
 import { NgSelectModule } from '@ng-select/ng-select'  ;
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // DIRETIVAS
 import { RedDirective } from './directives/red.directive';
@@ -47,7 +53,9 @@ import { AlunoReadComponent } from './components/aluno/aluno-read/aluno-read.com
 import { ProductRead2Component } from './components/aluno/product-read2/product-read2.component';
 import { ComboboxComponent } from './components/combobox/combobox.component';
 import { PagamentosComponent } from './components/pagamentos/pagamentos.component';
-import { LoginComponent } from './views/login/login.component';
+import { LoginComponent } from './views/authentication/login/login.component';
+import { BackgroundComponent } from './views/background/blank.component'
+
 
 registerLocaleData(localePt);
 
@@ -65,16 +73,20 @@ registerLocaleData(localePt);
     ProductRead2Component,
     ComboboxComponent,
     PagamentosComponent,
-    LoginComponent
+    LoginComponent,
+    BackgroundComponent
   ],
   imports: [
+    // AppRoutingModule,
+    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
+
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
     MatCardModule,
-    AppRoutingModule,
     MatButtonModule,
     MatSnackBarModule,
     HttpClientModule,
@@ -89,7 +101,9 @@ registerLocaleData(localePt);
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    NgbModule,
+    ToastrModule.forRoot(),
   ],
   providers: [{
     provide: LOCALE_ID,

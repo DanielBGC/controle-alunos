@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from "./views/home/home.component"
 import { AlunoCrudComponent } from "./views/aluno-crud/aluno-crud.component"
 import { PagamentosComponent } from './components/pagamentos/pagamentos.component';
-import { LoginComponent } from './views/login/login.component';
+import { LoginComponent } from './views/authentication/login/login.component';
 
 
 const routes: Routes = [

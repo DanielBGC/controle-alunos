@@ -1,0 +1,30 @@
+.container {
+    background-color: #3F51B5;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+
+    background-color: white;
+
+    width: 50vw;
+    height: 50vh;
+
+    margin: 0 auto;
+    border: none;
+    border-radius: 6px;
+    padding: 2rem;
+}
+
+form input, form i {
+    display: inline;
+    vertical-align: middle;
+}

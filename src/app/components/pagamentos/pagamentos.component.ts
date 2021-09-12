@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AlunoService } from 'src/app/services/aluno.service';
+import { UtilsServices } from 'src/app/services/utils.service';
 import { HeaderService } from '../template/header/header.service';
 
 @Component({
@@ -72,8 +73,9 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
   ]
 
   constructor(
-    private headerService: HeaderService,
-    private alunoService: AlunoService
+    private headerService : HeaderService,
+    private alunoService  : AlunoService,
+    private utilServices  : UtilsServices,
   ) { 
     this.headerService.headerData = {
       title: "Relatório de Pagamentos",
@@ -114,13 +116,13 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
     this.selected = this.selected.filter(item => item.aluno.toLowerCase().includes(filterAluno))
 
     if(this.objFormFilter.data.inicio != '' && this.objFormFilter.data.fim != '') {
-      let dataInicio = this.formataDataBR(this.objFormFilter.data.inicio);
-      let dataFim = this.formataDataBR(this.objFormFilter.data.fim);
-      let from = this.formataDataEN(dataInicio);
-      let to   = this.formataDataEN(dataFim);
+      let dataInicio = this.utilServices.formataDataBR(this.objFormFilter.data.inicio);
+      let dataFim = this.utilServices.formataDataBR(this.objFormFilter.data.fim);
+      let from = this.utilServices.formataDataEN(dataInicio)
+      let to = this.utilServices.formataDataEN(dataFim)
 
       this.selected = this.selected.filter(item => {
-        let currentData = this.formataDataEN(item.data)
+        let currentData = this.utilServices.formataDataEN(item.data)
 
         return (currentData >= from && currentData <= to);
       })
@@ -269,24 +271,6 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
       this.goHome();
       this.filtrarTabela();
     })
-  }
-
-  formataDataEN(date) {
-    date = date.split("/")
-
-    date = new Date(date[2], parseInt(date[1]) -1, date[0]);
-
-    return date;
-  }
-
-  formataDataBR(date) {
-    var dia = String(date.getDate()).padStart(2, '0');
-    var mes = String(date.getMonth() + 1).padStart(2, '0'); 
-    var ano = date.getFullYear();
-
-    let dataString = `${dia}/${mes}/${ano}`
-
-    return dataString;
   }
 }
 

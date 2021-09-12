@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ComboboxServices } from 'src/app/services/combobox.service';
 import { UtilsServices } from './../../../services/utils.service';
 import { AlunoService } from '../../../services/aluno.service';
 import { Aluno } from '../aluno.model';
+import { ApiUrl } from 'src/app/constants';
 
 
 @Component({
@@ -16,11 +19,9 @@ import { Aluno } from '../aluno.model';
 
 export class AlunoReadComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild("Modal") modal;
+  @ViewChild("modalAulas") modalAulas;
 
   //VARIÁVEIS
-  baseUrl = 'http://localhost:3000/api/alunos'
-
   displayedColumns = ['id', 'nome', 'turma', 'action']
   displayedColumnsAulas = ['dia', 'horario']
 
@@ -80,6 +81,8 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   public  objFormAulas    : FormArray;
 
   constructor(
+    private modalService    : NgbModal, 
+    private toastr          : ToastrService,
     private alunoService    : AlunoService,
     private formBuilder     : FormBuilder,
     private utilServices    : UtilsServices,
@@ -103,7 +106,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   async filtrarTabela() {
     let arrAlunos = []
 
-    await this.alunoService.get(this.baseUrl)
+    await this.alunoService.get(ApiUrl + "/alunos")
       .then(function (res: any) {
         res.forEach((element: Aluno) => {
           arrAlunos.push(element)
@@ -136,12 +139,24 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     this.filtrarAlunos()
   }
 
+  openModal(targetModal) {
+    this.modalService.open(targetModal, {
+      centered: true,
+      backdrop: 'static',
+    });
+  }
+
   goHome(): void {
     this.contentView = 1;
   }
 
+  close() {
+    this.modalService.dismissAll();
+  }
+
   openAulas(obj): void {
     this.contentView = 5;
+    // this.openModal(this.modalAulas)
 
     this.alunoView.nome = obj.nome;
   }
@@ -180,7 +195,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
 
     let alunoRes : Aluno;
 
-    await this.alunoService.get(this.baseUrl + '/' + id)
+    await this.alunoService.get(ApiUrl + '/alunos/' + id)
       .then(function (res: any) {
         res.forEach((element: Aluno) => {
           alunoRes = element;
@@ -197,7 +212,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     let alunoRes : Aluno;
     let id = obj.id;
 
-    await this.alunoService.get(this.baseUrl + '/' + id)
+    await this.alunoService.get(ApiUrl + '/alunos/' + id)
       .then(function (res: any) {
         res.forEach((element: Aluno) => {
           alunoRes = element;

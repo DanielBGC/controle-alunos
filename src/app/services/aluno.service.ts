@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { HttpClient } from '@angular/common/http';
 import { EMPTY, Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,9 @@ export class AlunoService {
   alunosUrl2 = "http://localhost:3000/api/alunos"
 
   constructor(
-    private snackBar: MatSnackBar,
-    private http: HttpClient
-    
+    private snackBar  : MatSnackBar,
+    private http      : HttpClient,
+    private toastr    : ToastrService,
     ) { }
 
   showMessage(msg: string, isError: boolean = false): void {
