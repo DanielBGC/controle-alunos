@@ -9,6 +9,7 @@ import { UtilsServices } from './../../../services/utils.service';
 import { AlunoService } from '../../../services/aluno.service';
 import { Aluno } from '../aluno.model';
 import { ApiUrl } from 'src/app/constants';
+import { HeaderService } from '../../template/header/header.service';
 
 
 @Component({
@@ -81,6 +82,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   public  objFormAulas    : FormArray;
 
   constructor(
+    private headerService   : HeaderService,
     private modalService    : NgbModal, 
     private toastr          : ToastrService,
     private alunoService    : AlunoService,
@@ -88,6 +90,12 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     private utilServices    : UtilsServices,
     public  comboboxServices: ComboboxServices
   ) { 
+    this.headerService.headerData = {
+      title: "Alunos",
+      icon: "face",
+      routeUrl: ""
+    }
+
     this.objFormRegister = this.formBuilder.group({
         nome : ['', Validators.required]
       , turma: ['', Validators.required]
