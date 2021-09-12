@@ -22,11 +22,15 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("modalAulas") modalAulas;
 
+  public  objFormFilter   : FormGroup;
+  public  objFormRegister : FormGroup;
+  public  objFormAulas    : FormArray;
+
   //VARIÁVEIS
+  contentView = 1;
+
   displayedColumns = ['id', 'nome', 'turma', 'action']
   displayedColumnsAulas = ['dia', 'hora_inicio', 'hora_fim']
-
-  contentView = 1;
 
   alunos: Aluno[];
   selectAlunos = [];
@@ -40,45 +44,20 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
 
   aluno: Aluno = {
     nome: '',
-    idade: null,
     turma: '',
     aulas: []
   }
 
   alunoView = {
     nome: '',
-    aulas: [
-        {dia: 'Segunda-feira', hora_inicio: '08h00', hora_fim: '09h00'}
-    ] 
-  }
-
-  alunoCreate: Aluno = {
-    nome: '',
-    idade: null,
-    turma: '',
-    aulas: []
-  }
-
-  alunoUpdate: Aluno = {
-    nome: '',
-    idade: null,
-    turma: '',
-    aulas: []
+    aulas: [] 
   }
 
   alunoDelete: Aluno = {
     nome: '',
-    idade: null,
     turma: '',
     aulas: []
   }
-
-  objFormFilter = {
-      nome : ''
-  }
-
-  public  objFormRegister : FormGroup;
-  public  objFormAulas    : FormArray;
 
   constructor(
     private headerService   : HeaderService,
@@ -95,8 +74,14 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
       routeUrl: ""
     }
 
+    this.objFormFilter = this.formBuilder.group({ 
+        nome : ['']
+      , turma: ['']
+    })
+
     this.objFormRegister = this.formBuilder.group({
-        nome : ['', Validators.required]
+        id   : ['']
+      , nome : ['', Validators.required]
       , turma: ['', Validators.required]
       , aulas: [[], Validators.required]
     })
@@ -129,19 +114,19 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   }
 
   filtrarAlunos() {
-    console.log(this.objFormFilter)
-    let filterNome = this.objFormFilter.nome.toLowerCase();
+    console.log(this.objFormFilter.value)
+    let filterNome = this.objFormFilter.value['nome'];
+    let filterTurma = this.objFormFilter.value['turma'];
 
     this.selectAlunos = this.alunos.filter(aluno => aluno.nome.toLowerCase().includes(filterNome))
+    this.selectAlunos = this.selectAlunos.filter(aluno => aluno.turma.includes(filterTurma))
 
     this.dataSource = new MatTableDataSource(this.selectAlunos);
     this.dataSource.sort = this.sort;
   }
 
   limparFiltros() {
-    this.objFormFilter = {
-        nome : ''
-    }
+    this.objFormFilter.reset()
 
     this.filtrarAlunos()
   }
@@ -155,6 +140,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
 
   goHome(): void {
     this.contentView = 1;
+    this.objFormRegister.reset();
   }
 
   close() {
@@ -163,13 +149,6 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
 
   openCreate(): void {
     this.contentView = 2;
-
-    this.alunoCreate = {
-      nome: '',
-      idade: null,
-      turma: '',
-      aulas: []
-    }  
   }
 
   getFormAula() {
@@ -193,16 +172,19 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     this.contentView = 3;
     let id = obj.id;
 
-    let alunoRes : Aluno;
+    this.objFormRegister.controls['id'].setValue(obj.id);
+    this.objFormRegister.controls['nome'].setValue(obj.nome);
+    this.objFormRegister.controls['turma'].setValue(obj.turma)
 
-    await this.alunoService.get(ApiUrl + '/alunos/' + id)
-      .then(function (res: any) {
-        res.forEach((element: Aluno) => {
-          alunoRes = element;
-        });
-    })
+    // let alunoRes : Aluno;
 
-    this.alunoUpdate = alunoRes;
+    // await this.alunoService.get(ApiUrl + '/alunos/' + id)
+    //   .then(function (res: any) {
+    //     res.forEach((element: Aluno) => {
+    //       alunoRes = element;
+    //     });
+    // })
+
   }
 
   async openDelete(obj) {
@@ -223,22 +205,23 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   }
 
   saveCreate(): void {
-
-    if(this.objFormRegister.controls['nome'].value == "" 
-      || this.objFormRegister.controls['nome'].value == " " 
-      || this.objFormRegister.controls['nome'].value == undefined 
-      || this.objFormRegister.controls['nome'].value == null) {
+    if(this.objFormRegister.value['nome'] == "" 
+      || this.objFormRegister.value['nome'] == " " 
+      || this.objFormRegister.value['nome'] == undefined 
+      || this.objFormRegister.value['nome'] == null) {
       this.alunoService.showMessage("Preencha o nome corretamente!")
     }
-    else if(this.objFormRegister.controls['turma'].value + "" == "" 
-      || this.objFormRegister.controls['turma'].value + "" == " " 
-      || this.objFormRegister.controls['turma'].value == undefined 
-      || this.objFormRegister.controls['turma'].value == null) {
+    else if(this.objFormRegister.value['turma'] + "" == "" 
+      || this.objFormRegister.value['turma'] + "" == " " 
+      || this.objFormRegister.value['turma'] == undefined 
+      || this.objFormRegister.value['turma'] == null) {
       this.alunoService.showMessage("Preencha a turma corretamente!")
     }
     else {
       if(this.objFormAulas.length > 0) {
-        this.objFormRegister.controls['aulas'].setValue(this.objFormAulas.value)
+        this.objFormRegister.value['aulas'] = this.objFormAulas.value;
+      } else {
+        this.objFormRegister.value['aulas'] = []
       }
 
       console.log(this.objFormRegister.value)
@@ -253,20 +236,23 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   }
 
   saveUpdate(): void {
-    if(this.alunoUpdate.nome == "" 
-      || this.alunoUpdate.nome == " " 
-      || this.alunoUpdate.nome == undefined 
-      || this.alunoUpdate.nome == null) {
+    if(this.objFormRegister.value['nome'] == "" 
+      || this.objFormRegister.value['nome'] == " " 
+      || this.objFormRegister.value['nome'] == undefined 
+      || this.objFormRegister.value['nome'] == null) {
       this.alunoService.showMessage("Preencha o nome corretamente!")
     }
-    else if(this.alunoUpdate.turma + "" == "" 
-          || this.alunoUpdate.turma + "" == " " 
-          || this.alunoUpdate.turma == undefined 
-          || this.alunoUpdate.turma == null) {
+    else if(this.objFormRegister.value['turma'] == "" 
+          || this.objFormRegister.value['turma'] == " " 
+          || this.objFormRegister.value['turma'] == undefined 
+          || this.objFormRegister.value['turma'] == null) {
       this.alunoService.showMessage("Preencha a turma corretamente!")
     }
     else {
-      this.alunoService.update(this.alunoUpdate).subscribe(() => {
+      delete this.objFormRegister.value['aulas'];
+
+      console.log(this.objFormRegister.value)
+      this.alunoService.update(this.objFormRegister.value).subscribe(() => {
         this.alunoService.showMessage("Aluno atualizado com sucesso!")
         this.goHome();
         this.filtrarTabela();

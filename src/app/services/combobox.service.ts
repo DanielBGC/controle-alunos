@@ -32,5 +32,13 @@ export class ComboboxServices {
     , {id: 11, text: 'Novembro' }
     , {id: 12, text: 'Dezembro' }
   ] 
+
+  turmas = [
+      {id: 1, text: '1º ano'}
+    , {id: 2, text: '2º ano'}
+    , {id: 3, text: '3º ano'}
+    , {id: 4, text: '4º ano'}
+    , {id: 5, text: '5º ano'}
+  ]
   
 }

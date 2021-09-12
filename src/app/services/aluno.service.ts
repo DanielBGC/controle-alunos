@@ -1,19 +1,17 @@
-import { catchError, map } from 'rxjs/operators';
-import { Aluno } from '../components/aluno/aluno.model';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { HttpClient } from '@angular/common/http';
 import { EMPTY, Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { Aluno } from '../components/aluno/aluno.model';
+import { ApiUrl } from 'src/app/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AlunoService {
-  alunosUrl = "http://localhost:3001/alunos"
-  alunosUrl2 = "http://localhost:3000/api/alunos"
-
   constructor(
     private snackBar  : MatSnackBar,
     private http      : HttpClient,
@@ -36,21 +34,21 @@ export class AlunoService {
   }
 
   create(aluno: Aluno): Observable<Aluno> {
-    return this.http.post<Aluno>(this.alunosUrl2, aluno).pipe(
+    return this.http.post<Aluno>(ApiUrl + '/alunos', aluno).pipe(
       map(obj => obj),
       catchError(error => this.handleError(error))
     )
   }
 
   read(): Observable<Aluno[]> {
-    return this.http.get<Aluno[]>(this.alunosUrl2).pipe(
+    return this.http.get<Aluno[]>(ApiUrl + '/alunos').pipe(
       map(obj => obj),
       catchError(error => this.handleError(error))
     )
   }
 
   readById(id: number): Observable<Aluno> {
-    const url = this.alunosUrl2 + "/" + id
+    const url = ApiUrl + '/alunos/' + id
     return this.http.get<Aluno>(url).pipe(
       map(obj => obj),
       catchError(error => this.handleError(error))
@@ -58,7 +56,7 @@ export class AlunoService {
   }
 
   update(aluno: Aluno): Observable<Aluno> {
-    const url = this.alunosUrl2 + "/" + aluno.id
+    const url = ApiUrl + '/alunos/' + aluno.id
     return this.http.post<Aluno>(url, aluno).pipe(
       map(obj => obj),
       catchError(error => this.handleError(error))
@@ -66,7 +64,7 @@ export class AlunoService {
   }
 
   delete(id: number): Observable<Aluno> {
-    const url = this.alunosUrl2 + "/" + id
+    const url = ApiUrl + '/alunos/' + id
     return this.http.delete<Aluno>(url).pipe(
       map(obj => obj),
       catchError(error => this.handleError(error))
