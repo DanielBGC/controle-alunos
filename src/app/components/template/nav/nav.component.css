@@ -1,8 +1,11 @@
+.container {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 .sidenav {
     background-color: #3F51B5;
     width: 200px;
-    margin: 0;
-    padding: 0;
 }
 
 .sidenav a {
