@@ -336,9 +336,14 @@
         <td mat-cell *matCellDef="let row">{{row.dia}}</td>
       </ng-container>
   
-      <ng-container matColumnDef="horario">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Horário</th>
-        <td mat-cell *matCellDef="let row">{{row.horario}}</td>
+      <ng-container matColumnDef="hora_inicio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Horário Início</th>
+        <td mat-cell *matCellDef="let row">{{row.hora_inicio}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="hora_fim">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Horário Fim</th>
+        <td mat-cell *matCellDef="let row">{{row.hora_fim}}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumnsAulas"></tr>

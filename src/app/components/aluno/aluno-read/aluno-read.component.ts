@@ -24,7 +24,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
 
   //VARIÁVEIS
   displayedColumns = ['id', 'nome', 'turma', 'action']
-  displayedColumnsAulas = ['dia', 'horario']
+  displayedColumnsAulas = ['dia', 'hora_inicio', 'hora_fim']
 
   contentView = 1;
 
@@ -48,8 +48,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   alunoView = {
     nome: '',
     aulas: [
-        {dia: 'Segunda-feira', horario: '08h00 - 09h00'}
-      , {dia: 'Quarta-feira', horario: '13h00 - 14h30'}
+        {dia: 'Segunda-feira', hora_inicio: '08h00', hora_fim: '09h00'}
     ] 
   }
 
@@ -162,13 +161,6 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     this.modalService.dismissAll();
   }
 
-  openAulas(obj): void {
-    this.contentView = 5;
-    // this.openModal(this.modalAulas)
-
-    this.alunoView.nome = obj.nome;
-  }
-
   openCreate(): void {
     this.contentView = 2;
 
@@ -267,11 +259,11 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
       || this.alunoUpdate.nome == null) {
       this.alunoService.showMessage("Preencha o nome corretamente!")
     }
-    else if(this.alunoUpdate.idade + "" == "" 
-          || this.alunoUpdate.idade + "" == " " 
-          || this.alunoUpdate.idade == undefined 
-          || this.alunoUpdate.idade == null) {
-      this.alunoService.showMessage("Preencha a idade corretamente!")
+    else if(this.alunoUpdate.turma + "" == "" 
+          || this.alunoUpdate.turma + "" == " " 
+          || this.alunoUpdate.turma == undefined 
+          || this.alunoUpdate.turma == null) {
+      this.alunoService.showMessage("Preencha a turma corretamente!")
     }
     else {
       this.alunoService.update(this.alunoUpdate).subscribe(() => {
@@ -290,7 +282,18 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     })
   }
 
- 
+  async openAulas(obj) {
+    this.contentView = 5;
 
+    let arrAulas = []
+    await this.alunoService.putRequest(ApiUrl + '/alunos/aulas/' + obj.id, {})
+    .then((res: any) => {
+      res.forEach(aula => {
+        arrAulas.push({dia: aula.dia, hora_inicio: aula.hora_inicio, hora_fim: aula.hora_fim})
+      })
+    })
 
+    this.alunoView.nome = obj.nome;
+    this.alunoView.aulas = arrAulas;
+  }
 }
