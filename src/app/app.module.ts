@@ -48,7 +48,6 @@ import { HeaderComponent } from './components/template/header/header.component';
 import { FooterComponent } from './components/template/footer/footer.component';
 import { NavComponent } from './components/template/nav/nav.component'
 import { HomeComponent } from './views/home/home.component';
-import { AlunoCrudComponent } from './views/aluno-crud/aluno-crud.component';
 import { AlunoReadComponent } from './components/aluno/aluno-read/aluno-read.component';
 import { ProductRead2Component } from './components/aluno/product-read2/product-read2.component';
 import { ComboboxComponent } from './components/combobox/combobox.component';
@@ -67,7 +66,6 @@ registerLocaleData(localePt);
     FooterComponent,
     NavComponent,
     HomeComponent,
-    AlunoCrudComponent,
     RedDirective,
     AlunoReadComponent,
     ProductRead2Component,

@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 // COMPONENTES
 import { HomeComponent } from "./views/home/home.component"
-import { AlunoCrudComponent } from "./views/aluno-crud/aluno-crud.component"
 import { PagamentosComponent } from './components/pagamentos/pagamentos.component';
 import { LoginComponent } from './views/authentication/login/login.component';
+import { AlunoReadComponent } from './components/aluno/aluno-read/aluno-read.component';
 
 
 const routes: Routes = [
@@ -19,7 +19,7 @@ const routes: Routes = [
   }, 
   {
     path: "alunos",
-    component: AlunoCrudComponent
+    component: AlunoReadComponent
   },
   {
     path: "pagamentos",

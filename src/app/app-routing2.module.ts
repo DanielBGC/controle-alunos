@@ -2,7 +2,8 @@ import { Routes } from '@angular/router';
 
 // COMPONENTES
 import { HomeComponent } from "./views/home/home.component"
-import { AlunoCrudComponent } from "./views/aluno-crud/aluno-crud.component"
+import { AlunoReadComponent } from './components/aluno/aluno-read/aluno-read.component';
+
 import { PagamentosComponent } from './components/pagamentos/pagamentos.component';
 import { LoginComponent } from './views/authentication/login/login.component';
 import { BackgroundComponent } from './views/background/blank.component'
@@ -13,7 +14,6 @@ import { NotfoundComponent } from './views/authentication/404/not-found.componen
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
-  
     path: 'login',
     component: LoginComponent
   },
@@ -27,7 +27,7 @@ export const routes: Routes = [
       }, 
       {
         path: "alunos",
-        component: AlunoCrudComponent
+        component: AlunoReadComponent
       },
       {
         path: "pagamentos",
@@ -40,7 +40,7 @@ export const routes: Routes = [
     component: NotfoundComponent
   },
   {
-      path: '**',
-      redirectTo: '/404'
+    path: '**',
+    redirectTo: '/404'
   }
 ]

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../../services/login.service'
+import { ApiUrl } from 'src/app/constants';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +9,6 @@ import { LoginService } from '../../../services/login.service'
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  baseUrl = 'http://localhost:3000/api/users/login'
-
   objLogin = {
     email: '',
     senha: ''
@@ -27,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   async login() {
     let resposta;
-    await this.loginService.login(this.baseUrl, this.objLogin)
+    await this.loginService.login(ApiUrl + '/users/login', this.objLogin)
       .then(function (res: any) {
         resposta = res;
     })
