@@ -92,10 +92,10 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   }
 
   async ngOnInit() {
-    this.filtrarTabela();
+    this.findDataTable();
   }
 
-  async filtrarTabela() {
+  async findDataTable() {
     let arrAlunos = []
 
     await this.alunoService.get(ApiUrl + "/alunos")
@@ -114,7 +114,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   }
 
   filtrarAlunos() {
-    let filterNome = this.objFormFilter.value['nome'] != null ? this.objFormFilter.value['nome'] : '';
+    let filterNome = this.objFormFilter.value['nome'] != null ? this.objFormFilter.value['nome'].toLowerCase() : '';
     let filterTurma = this.objFormFilter.value['turma'] != null ? this.objFormFilter.value['turma'] : '';
 
     this.selectAlunos = this.alunos.filter(aluno => aluno.nome.toLowerCase().includes(filterNome))
@@ -126,8 +126,6 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
 
   limparFiltros() {
     this.objFormFilter.reset()
-
-    this.filtrarAlunos()
   }
 
   openModal(targetModal) {
@@ -140,6 +138,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   goHome(): void {
     this.contentView = 1;
     this.objFormRegister.reset();
+    this.findDataTable()
   }
 
   close() {
@@ -229,7 +228,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
         console.log(data)
         this.alunoService.showMessage("Aluno inserido com sucesso!")
         this.goHome();
-        this.filtrarTabela();
+        this.findDataTable();
       })
     }
   }
@@ -254,7 +253,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
       this.alunoService.update(this.objFormRegister.value).subscribe(() => {
         this.alunoService.showMessage("Aluno atualizado com sucesso!")
         this.goHome();
-        this.filtrarTabela();
+        this.findDataTable();
       })
     }
   }
@@ -263,7 +262,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     this.alunoService.delete(id).subscribe(() => {
       this.alunoService.showMessage("Aluno excluído com sucesso!")
       this.goHome();
-      this.filtrarTabela();
+      this.findDataTable();
     })
   }
 
