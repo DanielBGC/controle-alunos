@@ -16,16 +16,43 @@ form {
 
     background-color: white;
 
-    width: 40vw;
-    height: 30vh;
+    width: 30vw;
+    height: 50vh;
 
     margin: 0 auto;
     border: none;
     border-radius: 6px;
     padding: 2rem;
+
+    position: relative;
+}
+
+form .form-field-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+form .form-field-group mat-form-field {
+    width: 100%;
+    margin-left: 1rem;
+}
+
+
+form .form-field-group input {
+    width: 90%;
+    font-size: 16pt;
+}
+
+form h4 {
+    margin-bottom: 2rem;
 }
 
 form input, form i {
-    display: inline;
     vertical-align: middle;
+    display: inline-block;
+}
+
+form button {
+    margin-top: 2rem;
 }

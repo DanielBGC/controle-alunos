@@ -4,6 +4,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AlunoService } from 'src/app/services/aluno.service';
 import { UtilsServices } from 'src/app/services/utils.service';
 import { HeaderService } from '../template/header/header.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { FormBuilder } from '@angular/forms';
+import { ComboboxServices } from 'src/app/services/combobox.service';
+import { ApiUrl } from 'src/app/constants';
+import { FiltroService } from 'src/app/services/filtros.service';
 
 @Component({
   selector: 'app-pagamentos',
@@ -73,9 +79,14 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
   ]
 
   constructor(
-    private headerService : HeaderService,
-    private alunoService  : AlunoService,
-    private utilServices  : UtilsServices,
+    private headerService   : HeaderService,
+    private modalService    : NgbModal, 
+    private toastr          : ToastrService,
+    private alunoService    : AlunoService,
+    private filtroService   : FiltroService,
+    private formBuilder     : FormBuilder,
+    private utilServices    : UtilsServices,
+    public  comboboxServices: ComboboxServices
   ) { 
     this.headerService.headerData = {
       title: "Relatório de Pagamentos",
@@ -86,6 +97,15 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     // this.filtrarTabela();
+  }
+
+  arrFiltroAlunos: any
+  async filtroAluno(value) {
+    console.log(value)
+
+    this.arrFiltroAlunos = await this.filtroService.alunos(ApiUrl + '/filtro/alunos', {"nome": value});
+
+    console.log(this.arrFiltroAlunos)
   }
 
   async filtrarTabela() {

@@ -13,8 +13,28 @@
         <input matInput placeholder="Responsável" [(ngModel)]="objFormFilter.responsavel" name="name">  
       </mat-form-field>
   
+      <!-- <mat-form-field>
+        <input matInput placeholder="Aluno" [(ngModel)]="objFormFilter.aluno" name="name" (keyup)="filtroAluno(objFormFilter.aluno)">  
+      </mat-form-field> -->
+
       <mat-form-field>
-        <input matInput placeholder="Aluno" [(ngModel)]="objFormFilter.aluno" name="name">  
+        <mat-label>Aluno</mat-label>
+        <mat-select>
+          <input 
+            matInput 
+            (keyup)="filtroAluno(objFormFilter.aluno)"
+            [(ngModel)]="objFormFilter.aluno" 
+            name="aluno"
+            placeholder="Digite aqui para pesquisar">
+          <mat-option>Nenhum registro encontrado</mat-option>
+          <mat-option 
+          *ngFor="let aluno of arrFiltroAlunos" 
+          [(ngModel)]="objFormFilter.aluno"         
+          [ngModelOptions]="{standalone: true}"
+          >
+            {{aluno.nome}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field>

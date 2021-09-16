@@ -114,9 +114,8 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
   }
 
   filtrarAlunos() {
-    console.log(this.objFormFilter.value)
-    let filterNome = this.objFormFilter.value['nome'];
-    let filterTurma = this.objFormFilter.value['turma'];
+    let filterNome = this.objFormFilter.value['nome'] != null ? this.objFormFilter.value['nome'] : '';
+    let filterTurma = this.objFormFilter.value['turma'] != null ? this.objFormFilter.value['turma'] : '';
 
     this.selectAlunos = this.alunos.filter(aluno => aluno.nome.toLowerCase().includes(filterNome))
     this.selectAlunos = this.selectAlunos.filter(aluno => aluno.turma.includes(filterTurma))
