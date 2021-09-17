@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
       this.loginService.showMessage(resposta.response, false)
       this.router.navigate(["/home"])
     } else {
-      this.loginService.showMessage(resposta.response, true)
+      this.loginService.showMessage("Falha na autenticação!", true)
       console.log(resposta.response)
     }
   }
