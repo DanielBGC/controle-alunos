@@ -71,7 +71,7 @@ export class AlunoReadComponent implements AfterViewInit, OnInit {
     this.headerService.headerData = {
       title: "Alunos",
       icon: "face",
-      routeUrl: ""
+      routeUrl: "/alunos"
     }
 
     this.objFormFilter = this.formBuilder.group({ 

@@ -91,7 +91,7 @@ export class PagamentosComponent implements OnInit, AfterViewInit {
     this.headerService.headerData = {
       title: "Relatório de Pagamentos",
       icon: "attach_money",
-      routeUrl: ""
+      routeUrl: "/pagamentos"
     }
   }
 
